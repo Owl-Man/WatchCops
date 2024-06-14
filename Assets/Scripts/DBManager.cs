@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class DBManager : MonoBehaviour
 {
-    private SurveySection[] quiz;
-    public List<string> quizEnemy = new();
+    private SurveySection[] survey;
+    public SurveySection[] surveyEnemy;
     public List<string> soft = new();
     public List<string> softEnemy = new();
     public List<string> other = new();
@@ -22,24 +21,7 @@ public class DBManager : MonoBehaviour
     private IEnumerator LoadData()
     {
         string path = Application.streamingAssetsPath + "/db.json";
-        /*string dataAsJson;
-
-        if (Application.platform == RuntimePlatform.Android)
-        {
-            WWW reader = new WWW(path);
-
-            while (!reader.isDone) { }
-
-            dataAsJson = reader.text;
-
-        }
-        else
-        {
-            dataAsJson = File.ReadAllText(path);
-        }
-
-        Task loadedData = JsonUtility.FromJson<Task>(dataAsJson);*/
-
+        
         using UnityWebRequest webRequest = UnityWebRequest.Get(path);
         yield return webRequest.SendWebRequest();
 
@@ -63,34 +45,13 @@ public class DBManager : MonoBehaviour
     {
         Task loadedData = JsonUtility.FromJson<Task>(jsonData);
         
-        quiz = loadedData.survey;
+        survey = loadedData.survey;
+        surveyEnemy = loadedData.surveyEnemy;
 
-        Debug.Log(quiz[0].questionData[0]);
-
-        /*foreach (var survey in loadedData.survey)
-        {
-            foreach (var questionGroup in survey.questions)
-            {
-                foreach (var question in questionGroup.Value)
-                {
-                    Debug.Log($"Question: {question.question}");
-                    // Access other properties similarly
-                }
-            }
-        }*/
-
-        //Debug.Log(quiz["1"].questions["Вопрос"]);
-        /*for (int i = 0; i < loadedData.soft[0].data.Length; i++)
-        {
-            quiz.Add(loadedData.soft[0].data[i]);
-        }
-        for (int i = 0; i < loadedData.softEnemy[0].data.Length; i++)
-        {
-            quiz.Add(loadedData.softEnemy[0].data[i]);
-        }
-        for (int i = 0; i < loadedData.other[0].data.Length; i++)
-        {
-            quiz.Add(loadedData.other[0].data[i]);
-        }*/
+        Debug.Log(survey[0].question);
+        Debug.Log(survey[0].answerRight);
+        Debug.Log(survey[0].answerMedium);
+        Debug.Log(surveyEnemy[0].question);
+        Debug.Log(surveyEnemy[0].answerMedium);
     }
 }

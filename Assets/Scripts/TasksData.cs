@@ -1,8 +1,5 @@
-using System.Collections.Generic;
-using Newtonsoft.Json;
-
 [System.Serializable]
-public class QuestionData
+public struct SurveySection
 {
     public string question;
     public string answerRight;
@@ -17,13 +14,7 @@ public class QuestionData
 }
 
 [System.Serializable]
-public class SurveySection
-{
-    public string[] questionData;
-}
-
-[System.Serializable]
-public class Task
+public struct Task
 {
     public SurveySection[] survey;
     public SurveySection[] surveyEnemy;
