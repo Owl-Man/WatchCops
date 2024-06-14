@@ -1,18 +1,23 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class DBManager : MonoBehaviour
 {
-    private SurveySection[] survey;
+    public LogTexts logTexts;
+    
+    public SurveySection[] survey;
     public SurveySection[] surveyEnemy;
-    public List<string> soft = new();
-    public List<string> softEnemy = new();
-    public List<string> other = new();
+    public SurveySection[] soft;
+    public SurveySection[] softEnemy;
+    public SurveySection[] other;
+
+    public static DBManager Instance;
 
     private void Awake()
     {
+        Instance = this;
+        
         StartCoroutine(LoadData());
 
         DontDestroyOnLoad(gameObject);
@@ -44,14 +49,21 @@ public class DBManager : MonoBehaviour
     private void ProcessJson(string jsonData)
     {
         Task loadedData = JsonUtility.FromJson<Task>(jsonData);
+
+        logTexts = loadedData.logTexts[0];
         
         survey = loadedData.survey;
         surveyEnemy = loadedData.surveyEnemy;
+        soft = loadedData.soft;
+        softEnemy = loadedData.softEnemy;
+        other = loadedData.other;
+        
+        Debug.Log(logTexts.enter);
 
         Debug.Log(survey[0].question);
-        Debug.Log(survey[0].answerRight);
-        Debug.Log(survey[0].answerMedium);
         Debug.Log(surveyEnemy[0].question);
-        Debug.Log(surveyEnemy[0].answerMedium);
+        Debug.Log(softEnemy[0].question);
+        Debug.Log(soft[0].question);
+        Debug.Log(other[0].question);
     }
 }
