@@ -17,6 +17,7 @@ public class Game : MonoBehaviour
 
     private IEnumerator Starting()
     {
+        StartCoroutine(ZoomAnimationIn());
         yield return new WaitForSeconds(0.7f);
         logPage.SetActive(true);
 

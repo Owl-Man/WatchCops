@@ -4,15 +4,23 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
-    [SerializeField] private GameObject menuBack1, menuBack2;
-    
-    public void OnPlayBtnClick()
-    {
-        menuBack1.SetActive(false);
-        menuBack2.SetActive(true);
+    [SerializeField] private GameObject newGame, continueGame;
 
-        StartCoroutine(LoadingGame());
+    private void Awake()
+    {
+        if (PlayerPrefs.GetInt("TasksCompleteCount", 0) == 0)
+        {
+            newGame.SetActive(true);
+            continueGame.SetActive(false);
+        }
+        else
+        {
+            newGame.SetActive(false);
+            continueGame.SetActive(true);
+        }
     }
+
+    public void OnPlayBtnClick() => StartCoroutine(LoadingGame());
 
     private IEnumerator LoadingGame()
     {
