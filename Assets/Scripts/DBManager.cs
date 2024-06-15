@@ -57,13 +57,5 @@ public class DBManager : MonoBehaviour
         soft = loadedData.soft;
         softEnemy = loadedData.softEnemy;
         other = loadedData.other;
-        
-        Debug.Log(logTexts.enter);
-
-        Debug.Log(survey[0].question);
-        Debug.Log(surveyEnemy[0].question);
-        Debug.Log(softEnemy[0].question);
-        Debug.Log(soft[0].question);
-        Debug.Log(other[0].question);
     }
 }

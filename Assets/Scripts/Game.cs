@@ -6,12 +6,12 @@ public class Game : MonoBehaviour
 {
     [SerializeField] private GameObject mainPage, loadingPage, logPage, webPage, taskPage, gameOverPage, exitPage;
 
-    [SerializeField] private CanvasScaler canvasScaler;
+    private CanvasScaler _canvasScaler;
 
     private bool _isStarted;
     private void Start()
     {
-        canvasScaler = GetComponent<CanvasScaler>();
+        _canvasScaler = GetComponent<CanvasScaler>();
         StartCoroutine(Starting());
     }
 
@@ -49,7 +49,6 @@ public class Game : MonoBehaviour
                 break;
             case 4:
                 StartCoroutine(OpenPage(exitPage));
-                StartCoroutine(ZoomAnimationIn());
                 break;
         }
     }
@@ -66,18 +65,18 @@ public class Game : MonoBehaviour
 
     private IEnumerator ZoomAnimationIn()
     {
-        while (canvasScaler.scaleFactor < 1.06f)
+        while (_canvasScaler.scaleFactor < 1.06f)
         {
-            canvasScaler.scaleFactor += 0.0012f;
+            _canvasScaler.scaleFactor += 0.0017f;
             yield return null;
         }
     }
     
     private IEnumerator ZoomAnimationOut()
     {
-        while (canvasScaler.scaleFactor > 1f)
+        while (_canvasScaler.scaleFactor > 1f)
         {
-            canvasScaler.scaleFactor -= 0.0012f;
+            _canvasScaler.scaleFactor -= 0.0017f;
             yield return null;
         }
     }

@@ -13,7 +13,7 @@ public class LoadingMenu : MonoBehaviour
 
     private IEnumerator Loading()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(6);
         _animator.Play("loadingMenu");
     }
 }
