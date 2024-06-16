@@ -13,6 +13,7 @@ namespace InGame
         public List<int> allAnswers = new();
 
         private SurveySection _currentTask;
+        private List<string> _currentAnswersForChoose = new();
 
         private int _surveySectionShownCount, _surveyEnemySectionShownCount;
         private int _softSectionShownCount, _softEnemySectionShownCount;
@@ -21,8 +22,6 @@ namespace InGame
         private const int SurveySectionCount = 3, SurveyEnemySectionCount = 1;
         private const int SoftSectionCount = 4, SoftEnemySectionCount = 2;
         private const int OtherSectionCount = 4;
-
-        private int _answerRightOrder, _answerMediumOrder, _answerWrongOrder;
 
         private void Start()
         {
@@ -75,7 +74,9 @@ namespace InGame
 
         private void GenerateQuestionWithAnswers()
         {
-            List<string> answers = new List<string>();
+            _currentAnswersForChoose.Clear();
+            
+            List<string> answers = new();
 
             answers.Add(_currentTask.answerRight);
             answers.Add(_currentTask.answerMedium);
@@ -83,25 +84,18 @@ namespace InGame
 
             text.text = _currentTask.question + "\n ----------------------";
 
-            while (answers.Count > 0)
+            while (_currentAnswersForChoose.Count < answers.Count)
             {
                 int variant = Random.Range(0, answers.Count);
-                text.text += "\n" + (4 - answers.Count) + ") " + answers[variant];
-
-                if (answers[variant] == _currentTask.answerRight)
+                
+                while (_currentAnswersForChoose.Contains(answers[variant]))
                 {
-                    _answerRightOrder = variant;
+                    variant = Random.Range(0, answers.Count);
                 }
-                else if (answers[variant] == _currentTask.answerMedium)
-                {
-                    _answerMediumOrder = variant;
-                }
-                else if (answers[variant] == _currentTask.answerWrong)
-                {
-                    _answerWrongOrder = variant;
-                }
-
-                answers.Remove(answers[variant]);
+                
+                _currentAnswersForChoose.Add(answers[variant]);
+                
+                text.text += "\n" + _currentAnswersForChoose.Count + ") " + answers[variant];
             }
         }
 
@@ -210,24 +204,24 @@ namespace InGame
     
         private void ChosenAnswer(int order) 
         {
-            if (order == _answerRightOrder)
+            if (_currentAnswersForChoose[order] == _currentTask.answerRight)
             {
                 Log.Instance.AddMessage(_currentTask.resultAnswerRight);
-                Task.Instance.DecreaseTime(3);
+                Task.Instance.DecreaseTime(1);
                 
                 allAnswers.Add(0);
             }
-            else if (order == _answerMediumOrder)
+            else if (_currentAnswersForChoose[order] == _currentTask.answerMedium)
             {
                 Log.Instance.AddMessage(_currentTask.resultAnswerMedium);
                 Task.Instance.DecreaseTime(2);
                 
                 allAnswers.Add(1);
             }
-            else if (order == _answerWrongOrder)
+            else if (_currentAnswersForChoose[order] == _currentTask.answerWrong)
             {
                 Log.Instance.AddMessage(_currentTask.resultAnswerWrong);
-                Task.Instance.DecreaseTime(1);
+                Task.Instance.DecreaseTime(3);
                 
                 allAnswers.Add(2);
             }

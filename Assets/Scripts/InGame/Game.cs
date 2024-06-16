@@ -12,10 +12,13 @@ namespace InGame
         private CanvasScaler _canvasScaler;
 
         private bool _isStarted;
+        
         private void Start()
         {
             _canvasScaler = GetComponent<CanvasScaler>();
-            StartCoroutine(Starting());
+            
+            if (PlayerPrefs.GetInt("TasksCompleteCount") == 0) StartCoroutine(Starting());
+            else _isStarted = true;
         }
 
         private IEnumerator Starting()

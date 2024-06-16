@@ -11,6 +11,7 @@ namespace InGame
         public void Win()
         {
             title.text = DBManager.Instance.logTexts.win;
+            title.text += "\n---";
             ExplanationLog();
             
             DeleteThisSession();
@@ -19,6 +20,7 @@ namespace InGame
         public void Loose()
         {
             title.text = DBManager.Instance.logTexts.loose;
+            title.text += "\n---";
             ExplanationLog();
             
             DeleteThisSession();
@@ -27,11 +29,17 @@ namespace InGame
         private static void DeleteThisSession()
         {
             PlayerPrefs.DeleteAll();
+            PlayerPrefs.SetInt("TasksCompleteCount", 0);
         }
 
         private void ExplanationLog()
         {
             Web web = GetComponent<Web>();
+
+            if (web.allShownTasks.Count == 0)
+            {
+                explanationLog.text = "Нет данных за сессию";
+            }
             
             for (int i = 0; i < web.allShownTasks.Count; i++)
             {

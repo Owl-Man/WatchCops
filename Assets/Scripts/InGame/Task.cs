@@ -75,7 +75,7 @@ namespace InGame
         {
             stats.text = "Прошло времени: " + (24 - _time) + "/24ч (осталось " + _time + "ч)\n";
             stats.text += "Работа с опросами " + _workWithSurveyCount + "/3 \n";
-            stats.text += "Работа с изображениями и текстом" + _workWithSoftCount + "/4 \n";
+            stats.text += "Работа с изображениями и текстом " + _workWithSoftCount + "/4 \n";
             stats.text += "---";
         }
 
@@ -85,7 +85,7 @@ namespace InGame
 
             for (int i = 0; i < _achievementsList.Count; i++)
             {
-                achievements.text += "\n" + _achievementsList[i];
+                achievements.text += "\n<color=yellow>></color>" + _achievementsList[i];
             }
         }
     }
