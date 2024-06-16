@@ -31,6 +31,7 @@ namespace InGame
             }
         
             text.text += message;
+            text.text += "\n";
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,12 +44,16 @@ namespace InGame
             
             for (int i = 0; i < web.allShownTasks.Count; i++)
             {
+                explanationLog.text += "\n";
+                
                 explanationLog.text += web.allAnswers[i] switch
                 {
                     0 => web.allShownTasks[i].question + ": " + web.allShownTasks[i].explanationAnswerRight,
                     1 => web.allShownTasks[i].question + ": " + web.allShownTasks[i].explanationAnswerMedium,
                     _ => web.allShownTasks[i].question + ": " + web.allShownTasks[i].explanationAnswerWrong
                 };
+                
+                explanationLog.text += "\n-";
             }
         }
     }
