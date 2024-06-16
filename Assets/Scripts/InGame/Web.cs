@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,6 +8,7 @@ namespace InGame
 {
     public class Web : MonoBehaviour
     {
+        [SerializeField] private GameObject loadingPage;
         [SerializeField] private Text text;
 
         public List<SurveySection> allShownTasks = new();
@@ -64,10 +66,8 @@ namespace InGame
                 Debug.Log("End of current level");
                 return;
             }
-            else
-            {
-                PlayerPrefs.SetInt("Section", chosenSection);
-            }
+
+            PlayerPrefs.SetInt("Section", chosenSection);
 
             GenerateQuestionWithAnswers();
         }
@@ -103,13 +103,19 @@ namespace InGame
         {
             if (chosenSection == 0)
             {
-                if (_surveySectionShownCount > SurveySectionCount)
+                if (_surveySectionShownCount >= SurveySectionCount)
                 {
                     chosenSection++;
                 }
                 else
                 {
                     int taskId = Random.Range(0, DBManager.Instance.survey.Length);
+                    
+                    while (allShownTasks.Contains(DBManager.Instance.survey[taskId]))
+                    {
+                        taskId = Random.Range(0, DBManager.Instance.survey.Length);
+                    }
+                    
                     _currentTask = DBManager.Instance.survey[taskId];
                     PlayerPrefs.SetInt("Task", taskId);
                     
@@ -120,13 +126,19 @@ namespace InGame
 
             if (chosenSection == 1)
             {
-                if (_surveyEnemySectionShownCount > SurveyEnemySectionCount)
+                if (_surveyEnemySectionShownCount >= SurveyEnemySectionCount)
                 {
                     chosenSection++;
                 }
                 else
                 {
                     int taskId = Random.Range(0, DBManager.Instance.surveyEnemy.Length);
+                    
+                    while (allShownTasks.Contains(DBManager.Instance.surveyEnemy[taskId]))
+                    {
+                        taskId = Random.Range(0, DBManager.Instance.surveyEnemy.Length);
+                    }
+                    
                     _currentTask = DBManager.Instance.surveyEnemy[taskId];
                     PlayerPrefs.SetInt("Task", taskId);
                     
@@ -137,13 +149,19 @@ namespace InGame
 
             if (chosenSection == 2)
             {
-                if (_softSectionShownCount > SoftSectionCount)
+                if (_softSectionShownCount >= SoftSectionCount)
                 {
                     chosenSection++;
                 }
                 else
                 {
                     int taskId = Random.Range(0, DBManager.Instance.soft.Length);
+                    
+                    while (allShownTasks.Contains(DBManager.Instance.soft[taskId]))
+                    {
+                        taskId = Random.Range(0, DBManager.Instance.soft.Length);
+                    }
+                    
                     _currentTask = DBManager.Instance.soft[taskId];
                     PlayerPrefs.SetInt("Task", taskId);
                     
@@ -154,13 +172,19 @@ namespace InGame
 
             if (chosenSection == 3)
             {
-                if (_softEnemySectionShownCount > SoftEnemySectionCount)
+                if (_softEnemySectionShownCount >= SoftEnemySectionCount)
                 {
                     chosenSection++;
                 }
                 else
                 {
                     int taskId = Random.Range(0, DBManager.Instance.softEnemy.Length);
+                    
+                    while (allShownTasks.Contains(DBManager.Instance.softEnemy[taskId]))
+                    {
+                        taskId = Random.Range(0, DBManager.Instance.softEnemy.Length);
+                    }
+                    
                     _currentTask = DBManager.Instance.softEnemy[taskId];
                     PlayerPrefs.SetInt("Task", taskId);
                     
@@ -171,7 +195,7 @@ namespace InGame
 
             if (chosenSection == 4)
             {
-                if (_surveySectionShownCount > SurveySectionCount && _surveyEnemySectionShownCount >=
+                if (_surveySectionShownCount >= SurveySectionCount && _surveyEnemySectionShownCount >=
                                                                   SurveyEnemySectionCount
                                                                   && _softSectionShownCount >= SoftSectionCount
                                                                   && _softEnemySectionShownCount >= SoftEnemySectionCount
@@ -187,6 +211,12 @@ namespace InGame
                 else
                 {
                     int taskId = Random.Range(0, DBManager.Instance.other.Length);
+                    
+                    while (allShownTasks.Contains(DBManager.Instance.other[taskId]))
+                    {
+                        taskId = Random.Range(0, DBManager.Instance.other.Length);
+                    }
+                    
                     _currentTask = DBManager.Instance.other[taskId];
                     PlayerPrefs.SetInt("Task", taskId);
                     
@@ -200,7 +230,18 @@ namespace InGame
             return chosenSection;
         }
 
-        public void OnAnsBtnClick(int order) => ChosenAnswer(order);
+        public void OnAnsBtnClick(int order)
+        {
+            StartCoroutine(OpenPage());
+            ChosenAnswer(order);
+        }
+
+        private IEnumerator OpenPage()
+        {
+            loadingPage.SetActive(true);
+            yield return new WaitForSeconds(0.6f);
+            loadingPage.SetActive(false);
+        }
     
         private void ChosenAnswer(int order) 
         {

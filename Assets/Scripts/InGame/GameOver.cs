@@ -31,6 +31,21 @@ namespace InGame
         {
             PlayerPrefs.DeleteAll();
             PlayerPrefs.SetInt("TasksCompleteCount", 0);
+            
+            /*PlayerPrefs.SetInt("SurveySectionShownCount", 0);
+            PlayerPrefs.SetInt("SurveyEnemySectionShownCount", 0);
+            PlayerPrefs.SetInt("SoftSectionShownCount", 0);
+            PlayerPrefs.SetInt("SoftEnemySectionShownCount", 0);
+            PlayerPrefs.SetInt("OtherSectionShownCount", 0);
+            
+            PlayerPrefs.SetInt("Time", 0);
+            PlayerPrefs.SetInt("WorkWithSurveyCount", 0);
+            PlayerPrefs.SetInt("WorkWithSoftCount", 0);*/
+
+            for (int i = 0; i < 4; i++)
+            {
+                PlayerPrefs.SetString("Ach" + i, "0");
+            }
         }
 
         private void ExplanationLog()

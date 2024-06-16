@@ -94,6 +94,18 @@
 			"explanationAnswerRight": "Софт 3 вопрос объяснение правильного ответа",
 			"explanationAnswerMedium": "Софт 3 вопрос объяснение среднего ответа",
 			"explanationAnswerWrong": "Софт 3 вопрос объяснение неправильного ответа"
+		},
+		{
+			"question": "Софт 4 вопрос",
+			"answerRight": "Софт 4 вопрос ответ правильный",
+			"answerMedium": "Софт 4 вопрос ответ средний",
+			"answerWrong": "Софт 4 вопрос ответ неправильный",
+			"resultAnswerRight": "Софт 4 вопрос результат правильного ответа",
+			"resultAnswerMedium": "Софт 4 вопрос результат среднего ответа",
+			"resultAnswerWrong": "Софт 4 вопрос результат неправильного ответа",
+			"explanationAnswerRight": "Софт 4 вопрос объяснение правильного ответа",
+			"explanationAnswerMedium": "Софт 4 вопрос объяснение среднего ответа",
+			"explanationAnswerWrong": "Софт 4 вопрос объяснение неправильного ответа"
 		}
 	],
 	"softEnemy": [

@@ -367,12 +367,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 292172807}
-  - {fileID: 1190208489}
   - {fileID: 1182780225}
   - {fileID: 1217753252}
   - {fileID: 1790964685}
   - {fileID: 2097111860}
   - {fileID: 1853351775}
+  - {fileID: 1190208489}
   - {fileID: 920784652}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -425,6 +425,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e7e6c18eca46fa9de0c1e159d814b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadingPage: {fileID: 1190208485}
   text: {fileID: 1210186255}
   allShownTasks: []
   allAnswers: 

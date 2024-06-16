@@ -33,6 +33,11 @@ namespace InGame
                         _achievementsList.Add(PlayerPrefs.GetString("Ach" + i));
                     }
                 }
+                
+                if (_time <= 0)
+                {
+                    GetComponent<Game>().GameOvering(false);
+                }
             }
             
             UpdateStatsText();
@@ -43,10 +48,13 @@ namespace InGame
         {
             _time -= decreaseTime;
             
+            if (_time <= 0)
+            {
+                print(_time);
+                GetComponent<Game>().GameOvering(false);
+            }
+            
             PlayerPrefs.SetInt("Time", _time);
-            
-            if (_time <= 0) GetComponent<Game>().GameOvering(false);
-            
             UpdateStatsText();
         }
 
