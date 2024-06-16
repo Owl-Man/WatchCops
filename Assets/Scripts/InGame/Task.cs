@@ -20,6 +20,21 @@ namespace InGame
 
         private void Start()
         {
+            if (PlayerPrefs.GetInt("TasksCompleteCount") > 0)
+            {
+                _time = PlayerPrefs.GetInt("Time", 24);
+                _workWithSurveyCount = PlayerPrefs.GetInt("WorkWithSurveyCount", 0);
+                _workWithSoftCount = PlayerPrefs.GetInt("WorkWithSoftCount", 0);
+
+                for (int i = 0; i < 4; i++)
+                {
+                    if (PlayerPrefs.GetString("Ach" + i, "0") != "0")
+                    {
+                        _achievementsList.Add(PlayerPrefs.GetString("Ach" + i));
+                    }
+                }
+            }
+            
             UpdateStatsText();
             UpdateAchievementText();
         }
@@ -27,24 +42,32 @@ namespace InGame
         public void DecreaseTime(int decreaseTime)
         {
             _time -= decreaseTime;
+            
+            PlayerPrefs.SetInt("Time", _time);
+            
+            if (_time <= 0) GetComponent<Game>().GameOvering(false);
+            
             UpdateStatsText();
         }
 
         public void AddWorkWithSurvey()
         {
             _workWithSurveyCount++;
+            PlayerPrefs.SetInt("WorkWithSurveyCount", _workWithSurveyCount);
             UpdateStatsText();
         }
 
         public void AddWorkWithSoft()
         {
             _workWithSoftCount++;
+            PlayerPrefs.SetInt("WorkWithSoftCount", _workWithSoftCount);
             UpdateStatsText();
         }
 
         public void AddAchievement(string achievement)
         {
             _achievementsList.Add(achievement);
+            PlayerPrefs.SetString("Ach" + (_achievementsList.Count - 1), achievement);
             UpdateAchievementText();
         }
 

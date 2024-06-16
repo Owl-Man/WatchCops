@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace InGame
@@ -25,6 +26,8 @@ namespace InGame
 
             _isStarted = true;
         }
+
+        public void OnQuitFromGameOverBtnClick() => SceneManager.LoadScene("Menu");
 
         public void GameOvering(bool isWin)
         {

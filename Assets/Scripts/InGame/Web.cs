@@ -10,6 +10,7 @@ namespace InGame
         [SerializeField] private Text text;
 
         public List<SurveySection> allShownTasks = new();
+        public List<int> allAnswers = new();
 
         private SurveySection _currentTask;
 
@@ -25,20 +26,57 @@ namespace InGame
 
         private void Start()
         {
-            GenerateTask();
+            if (PlayerPrefs.GetInt("TasksCompleteCount") > 0)
+            {
+                _surveySectionShownCount = PlayerPrefs.GetInt("SurveySectionShownCount", 0);
+                _surveyEnemySectionShownCount = PlayerPrefs.GetInt("SurveyEnemySectionShownCount", 0);
+                _softSectionShownCount = PlayerPrefs.GetInt("SoftSectionShownCount", 0);
+                _softEnemySectionShownCount = PlayerPrefs.GetInt("SoftEnemySectionShownCount", 0);
+                _otherSectionShownCount = PlayerPrefs.GetInt("OtherSectionShownCount", 0);
+
+                int section = PlayerPrefs.GetInt("Section");
+                int taskId = PlayerPrefs.GetInt("Task");
+
+                _currentTask = section switch
+                {
+                    0 => DBManager.Instance.survey[taskId],
+                    1 => DBManager.Instance.surveyEnemy[taskId],
+                    2 => DBManager.Instance.soft[taskId],
+                    3 => DBManager.Instance.softEnemy[taskId],
+                    4 => DBManager.Instance.other[taskId],
+                    _ => _currentTask
+                };
+            }
+            else
+            {
+                GenerateTask();
+            }
+            
+            GenerateQuestionWithAnswers();
         }
 
         private void GenerateTask()
         {
-            if (ChooseSection(Random.Range(0, 5)) == -1)
+            int chosenSection = ChooseSection(Random.Range(0, 5));
+            
+            if (chosenSection == -1)
             {
                 GetComponent<Game>().GameOvering(true);
                 Debug.Log("End of current level");
                 return;
             }
+            else
+            {
+                PlayerPrefs.SetInt("Section", chosenSection);
+            }
 
+            GenerateQuestionWithAnswers();
+        }
+
+        private void GenerateQuestionWithAnswers()
+        {
             List<string> answers = new List<string>();
-        
+
             answers.Add(_currentTask.answerRight);
             answers.Add(_currentTask.answerMedium);
             answers.Add(_currentTask.answerWrong);
@@ -62,7 +100,7 @@ namespace InGame
                 {
                     _answerWrongOrder = variant;
                 }
-            
+
                 answers.Remove(answers[variant]);
             }
         }
@@ -77,7 +115,10 @@ namespace InGame
                 }
                 else
                 {
-                    _currentTask = DBManager.Instance.survey[Random.Range(0, DBManager.Instance.survey.Length)];
+                    int taskId = Random.Range(0, DBManager.Instance.survey.Length);
+                    _currentTask = DBManager.Instance.survey[taskId];
+                    PlayerPrefs.SetInt("Task", taskId);
+                    
                     _surveySectionShownCount++;
                     PlayerPrefs.SetInt("SurveySectionShownCount", _surveySectionShownCount);
                 }
@@ -91,7 +132,10 @@ namespace InGame
                 }
                 else
                 {
-                    _currentTask = DBManager.Instance.surveyEnemy[Random.Range(0, DBManager.Instance.surveyEnemy.Length)];
+                    int taskId = Random.Range(0, DBManager.Instance.surveyEnemy.Length);
+                    _currentTask = DBManager.Instance.surveyEnemy[taskId];
+                    PlayerPrefs.SetInt("Task", taskId);
+                    
                     _surveyEnemySectionShownCount++;
                     PlayerPrefs.SetInt("SurveyEnemySectionShownCount", _surveyEnemySectionShownCount);
                 }
@@ -105,7 +149,10 @@ namespace InGame
                 }
                 else
                 {
-                    _currentTask = DBManager.Instance.soft[Random.Range(0, DBManager.Instance.soft.Length)];
+                    int taskId = Random.Range(0, DBManager.Instance.soft.Length);
+                    _currentTask = DBManager.Instance.soft[taskId];
+                    PlayerPrefs.SetInt("Task", taskId);
+                    
                     _softSectionShownCount++;
                     PlayerPrefs.SetInt("SoftSectionShownCount", _softSectionShownCount);
                 }
@@ -119,7 +166,10 @@ namespace InGame
                 }
                 else
                 {
-                    _currentTask = DBManager.Instance.softEnemy[Random.Range(0, DBManager.Instance.softEnemy.Length)];
+                    int taskId = Random.Range(0, DBManager.Instance.softEnemy.Length);
+                    _currentTask = DBManager.Instance.softEnemy[taskId];
+                    PlayerPrefs.SetInt("Task", taskId);
+                    
                     _softEnemySectionShownCount++;
                     PlayerPrefs.SetInt("SoftEnemySectionShownCount", _softEnemySectionShownCount);
                 }
@@ -142,7 +192,10 @@ namespace InGame
                 }
                 else
                 {
-                    _currentTask = DBManager.Instance.other[Random.Range(0, DBManager.Instance.other.Length)];
+                    int taskId = Random.Range(0, DBManager.Instance.other.Length);
+                    _currentTask = DBManager.Instance.other[taskId];
+                    PlayerPrefs.SetInt("Task", taskId);
+                    
                     _otherSectionShownCount++;
                     PlayerPrefs.SetInt("OtherSectionShownCount", _otherSectionShownCount);
                 }
@@ -161,16 +214,22 @@ namespace InGame
             {
                 Log.Instance.AddMessage(_currentTask.resultAnswerRight);
                 Task.Instance.DecreaseTime(3);
+                
+                allAnswers.Add(0);
             }
             else if (order == _answerMediumOrder)
             {
                 Log.Instance.AddMessage(_currentTask.resultAnswerMedium);
                 Task.Instance.DecreaseTime(2);
+                
+                allAnswers.Add(1);
             }
             else if (order == _answerWrongOrder)
             {
                 Log.Instance.AddMessage(_currentTask.resultAnswerWrong);
                 Task.Instance.DecreaseTime(1);
+                
+                allAnswers.Add(2);
             }
 
             if (DBManager.Instance.survey.Contains(_currentTask)) Task.Instance.AddWorkWithSurvey();
@@ -178,7 +237,7 @@ namespace InGame
             else if (DBManager.Instance.other.Contains(_currentTask)) Task.Instance.AddAchievement(_currentTask.achievement);
             
             allShownTasks.Add(_currentTask);
-
+            
             GenerateTask();
         }
     }
