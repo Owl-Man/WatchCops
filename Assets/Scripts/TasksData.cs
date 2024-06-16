@@ -11,6 +11,7 @@ public struct SurveySection
     public string explanationAnswerRight;
     public string explanationAnswerMedium;
     public string explanationAnswerWrong;
+    public string achievement;
 }
 
 [System.Serializable]
